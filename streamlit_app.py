@@ -21,6 +21,14 @@ st.sidebar.markdown("""
 3. View structured data and ATS Score.
 """)
 
+st.sidebar.markdown("---")
+# Backend URL Configuration
+backend_url = st.sidebar.text_input(
+    "Backend API URL", 
+    value="https://rescomail-backend.vercel.app",
+    help="Enter your deployed FastAPI backend URL if not running locally."
+)
+
 # Main Content
 st.subheader("Upload Resume")
 uploaded_file = st.file_uploader("Choose a file", type=["pdf", "txt"])
@@ -35,8 +43,7 @@ if uploaded_file is not None:
                 files = {"file": (uploaded_file.name, uploaded_file.getvalue(), uploaded_file.type)}
                 
                 # Make API Request to FastAPI Backend
-                # Assuming backend runs on default 8000 port
-                response = requests.post("http://127.0.0.1:8000/upload-resume", files=files)
+                response = requests.post(f"{backend_url}/upload-resume", files=files)
                 
                 if response.status_code == 200:
                     data = response.json()
