@@ -1,3 +1,4 @@
+import asyncio
 from google import genai
 import os
 import dotenv
@@ -11,12 +12,14 @@ class GeminiClient:
             raise RuntimeError("GOOGLE_API_KEY is not found.")
         self.client = genai.Client(api_key=api_key)
 
-    def generate(self, prompt):
-        response = self.client.models.generate_content(
-            model = "gemini-2.5-flash",
-            contents = prompt
-        )
-        return response.text
+    async def generate(self, prompt):
+        def _generate():
+            response = self.client.models.generate_content(
+                model = "gemini-2.5-flash",
+                contents = prompt
+            )
+            return response.text
+        return await asyncio.to_thread(_generate)
 
     
 if __name__ == "__main__":

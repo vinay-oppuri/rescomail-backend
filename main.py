@@ -1,6 +1,10 @@
-def main():
-    print("Hello from backend!")
+from fastapi import FastAPI
+from api import upload
 
+app = FastAPI()
 
-if __name__ == "__main__":
-    main()
+app.include_router(upload.router)
+
+@app.get("/")
+def home():
+    return {"message": "Server is running"}
